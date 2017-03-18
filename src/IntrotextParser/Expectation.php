@@ -26,12 +26,12 @@ class Expectation
     }
 
     /**
-     * @param $symbol
-     * @return callable|null
+     * @param string $symbol
+     * @return bool
      */
     public function checkExpectation($symbol)
     {
-        return preg_match($this->expectedSymbol, $symbol);
+        return (preg_match($this->expectedSymbol, $symbol) == 1);
     }
 
     /**
