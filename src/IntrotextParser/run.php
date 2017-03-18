@@ -55,7 +55,7 @@ $stateNormalProxy->addExpectation($normalProxyExpectation);
 
 
 $stateWaitingCinCut->addExpectation(new Expectation(
-    '/c/',
+    '/C/',
     function ($parser) use ($stateWaitingUinCut) {
         /** @var IntrotextParser $parser */
         $parser->setState($stateWaitingUinCut);
@@ -65,7 +65,7 @@ $stateWaitingCinCut->addExpectation($normalProxyExpectation);
 
 
 $stateWaitingUinCut->addExpectation(new Expectation(
-    '/u/',
+    '/U/',
     function ($parser) use ($stateWaitingTinCut) {
         /** @var IntrotextParser $parser */
         $parser->setState($stateWaitingTinCut);
@@ -75,7 +75,7 @@ $stateWaitingUinCut->addExpectation($normalProxyExpectation);
 
 
 $stateWaitingTinCut->addExpectation(new Expectation(
-    '/t/',
+    '/T/',
     function ($parser) use ($stateWaitingClosingBracketInCut) {
         /** @var IntrotextParser $parser */
         $parser->setState($stateWaitingClosingBracketInCut);
@@ -97,14 +97,7 @@ $stateWaitingClosingBracketInCut->addExpectation($normalProxyExpectation);
 
 
 $stateAfterOpeningBracket->addExpectation(new Expectation(
-    '/b/',
-    function ($parser) use ($stateWaitingClosingBracket) {
-        /** @var IntrotextParser $parser */
-        $parser->setState($stateWaitingClosingBracket);
-    }
-));
-$stateAfterOpeningBracket->addExpectation(new Expectation(
-    '/i/',
+    '/(b|i)/',
     function ($parser) use ($stateWaitingClosingBracket) {
         /** @var IntrotextParser $parser */
         $parser->setState($stateWaitingClosingBracket);
@@ -183,17 +176,10 @@ $stateWaitingClosingBracket->addExpectation($normalProxyExpectation);
 
 
 $stateWaitingClosingTag->addExpectation(new Expectation(
-    '/b/',
-    function ($parser) use ($stateWaitingClosingBracketInClosingTag) {
+    '/(b|i)/',
+    function ($parser) use ($stateWaitingClosingBracket) {
         /** @var IntrotextParser $parser */
-        $parser->setState($stateWaitingClosingBracketInClosingTag);
-    }
-));
-$stateWaitingClosingTag->addExpectation(new Expectation(
-    '/i/',
-    function ($parser) use ($stateWaitingClosingBracketInClosingTag) {
-        /** @var IntrotextParser $parser */
-        $parser->setState($stateWaitingClosingBracketInClosingTag);
+        $parser->setState($stateWaitingClosingBracket);
     }
 ));
 $stateWaitingClosingTag->addExpectation(new Expectation(
@@ -217,24 +203,12 @@ $stateWaitingRinUrlClosing->addExpectation($normalProxyExpectation);
 
 $stateWaitingLinUrlClosing->addExpectation(new Expectation(
     '/l/',
-    function ($parser) use ($stateWaitingClosingBracketInClosingTag) {
+    function ($parser) use ($stateWaitingClosingBracket) {
         /** @var IntrotextParser $parser */
-        $parser->setState($stateWaitingClosingBracketInClosingTag);
+        $parser->setState($stateWaitingClosingBracket);
     }
 ));
 $stateWaitingLinUrlClosing->addExpectation($normalProxyExpectation);
-
-
-$stateWaitingClosingBracketInClosingTag->addExpectation(new Expectation(
-    '/\]/',
-    function ($parser) use ($stateNormalProxy) {
-        /** @var IntrotextParser $parser */
-        $parser->setState($stateNormalProxy);
-    }
-));
-$stateWaitingClosingBracketInClosingTag->addExpectation($normalProxyExpectation);
-
-
 
 
 /**
@@ -242,7 +216,7 @@ $stateWaitingClosingBracketInClosingTag->addExpectation($normalProxyExpectation)
  */
 $introtextParser->setState($stateNormalProxy);
 
-$text = 'bal[b]f[b][url=http://ya.ru]d[/url][/b][i]sd';
+$text = 'bal[b][i]f[/i][b][url=http://ya.ru]d[/url][/b]<CUT>[i]sd';
 $i = 0;
 
 while (!$introtextParser->isIsFinished()) {
@@ -252,4 +226,4 @@ while (!$introtextParser->isIsFinished()) {
         break;
     }
 }
-$introtextParser->completeTags();
+$introtextParser->output($introtextParser->completeTags());

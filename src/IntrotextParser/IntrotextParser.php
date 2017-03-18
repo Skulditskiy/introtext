@@ -52,7 +52,16 @@ class IntrotextParser
      */
     public function completeTags()
     {
-        echo 'tags completed';
+        $result = '';
+        for ($i = count($this->openingTags)-1; $i >= 0; $i--) {
+            $openedTag = $this->openingTags[$i];
+            if ((count($this->closingTags)) && ($openedTag == end($this->closingTags))) {
+                array_pop($this->closingTags);
+            } else {
+                $result .= '</' . $openedTag . '>';
+            }
+        }
+        return $result;
     }
 
     /**
