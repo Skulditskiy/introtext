@@ -20,6 +20,14 @@ class State
     }
 
     /**
+     * @return Expectation[]
+     */
+    public function getExpectations()
+    {
+        return $this->expectations;
+    }
+
+    /**
      * @param $symbol
      * @return \Closure|null
      */
