@@ -47,6 +47,9 @@ class IntrotextParser
         $callback($this);
     }
 
+    /**
+     * Output closing necessary closing tags based on count of saved opened and closed tags during parsing
+     */
     public function completeTags()
     {
         echo 'tags completed';
@@ -97,11 +100,36 @@ class IntrotextParser
      */
     public function flushBuffer()
     {
-        $this->buffer = str_replace('[b]', '<b>', $this->buffer);
-        $this->buffer = str_replace('[/b]', '</b>', $this->buffer);
-        $this->buffer = str_replace('[i]', '<i>', $this->buffer);
-        $this->buffer = str_replace('[/i]', '</i>', $this->buffer);
-        $this->buffer = preg_replace('/\[url=(.*)\]/','<a href="$1">', $this->buffer);
+        $this->buffer = str_replace('[b]', '<b>', $this->buffer, $count);
+        if ($count) {
+            $this->addOpeningTag('b');
+        }
+
+        $this->buffer = str_replace('[/b]', '</b>', $this->buffer, $count);
+        if ($count) {
+            $this->addClosingTag('b');
+        }
+
+        $this->buffer = str_replace('[i]', '<i>', $this->buffer, $count);
+        if ($count) {
+            $this->addOpeningTag('i');
+        }
+
+        $this->buffer = str_replace('[/i]', '</i>', $this->buffer, $count);
+        if ($count) {
+            $this->addClosingTag('i');
+        }
+
+        $this->buffer = preg_replace('/\[url=(.*)\]/','<a href="$1">', $this->buffer, -1, $count);
+        if ($count) {
+            $this->addOpeningTag('a');
+        }
+
+        $this->buffer = str_replace('[/url]', '</a>', $this->buffer, $count);
+        if ($count) {
+            $this->addClosingTag('a');
+        }
+
         $this->output($this->buffer);
         $this->buffer = '';
     }

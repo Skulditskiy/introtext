@@ -242,7 +242,7 @@ $stateWaitingClosingBracketInClosingTag->addExpectation($normalProxyExpectation)
  */
 $introtextParser->setState($stateNormalProxy);
 
-$text = 'bal[b]fd[i]sd';
+$text = 'bal[b]f[b][url=http://ya.ru]d[/url][/b][i]sd';
 $i = 0;
 
 while (!$introtextParser->isIsFinished()) {
