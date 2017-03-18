@@ -1,0 +1,10 @@
+{
+    "name": "skulditskiy/introtext",
+    "autoload": {
+        "psr-0": {
+            "IntrotextParser\\Tests\\": "tests/",
+            "IntrotextParser\\": "src/"
+        }
+    }
+}
+
