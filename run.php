@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "vendor".DIRECTORY_SEPARATOR."autoload.php";
+require_once "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
 
 use IntrotextParser\IntrotextParser;
 use IntrotextParser\State;
@@ -28,6 +28,9 @@ $stateWaitingLinUrlClosing = new State();
 $stateWaitingClosingBracketInClosingTag = new State();
 
 
+/**
+ * adding possible Expectations to each states
+ */
 $normalProxyExpectation = new Expectation(
     '/./',
     function ($parser) use ($stateNormalProxy) {
@@ -219,7 +222,7 @@ $introtextParser->setState($stateNormalProxy);
 $text = 'bal[b][i]f[/i][b][url=http://ya.ru]d[/url][/b]<CUT>[i]sd';
 $i = 0;
 
-while (!$introtextParser->isIsFinished()) {
+while (!$introtextParser->isFinished()) {
     $introtextParser->proceedCharacter($text[$i]);
     $i++;
     if ($i >= strlen($text)) {

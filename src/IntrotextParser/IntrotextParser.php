@@ -67,7 +67,7 @@ class IntrotextParser
     /**
      * @return bool
      */
-    public function isIsFinished()
+    public function isFinished()
     {
         return (bool)$this->isFinished;
     }
